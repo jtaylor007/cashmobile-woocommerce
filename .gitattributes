@@ -1,0 +1,5 @@
+# Les fins de ligne sont un piege connu de ce poste : un script shell en CRLF
+# echoue sur un shell Unix avec un message qui ne parle pas de fins de ligne.
+* text=auto eol=lf
+*.png binary
+*.zip binary
