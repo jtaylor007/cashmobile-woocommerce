@@ -1,7 +1,16 @@
 # CashMobile Gateway for WooCommerce
 
 Le plugin WooCommerce de CashMobile. Distribue aux marchands depuis
-https://cashmobile.net/developer
+https://cashmobile.net/developer/woocommerce
+
+Depot : https://github.com/jtaylor007/cashmobile-woocommerce
+
+**Ce depot est prive.** Le plugin est publie sous GPL-2.0-or-later, comme le veut
+l'ecosysteme WordPress : quiconque recoit l'archive a donc droit a la source. Le
+rendre public est le moyen le plus simple de tenir cela — et, pour un plugin de
+paiement, une source lisible est un argument de confiance plutot qu'une
+concession. Tant qu'il reste prive, la page developpeur masque le lien vers lui
+(reglage `PLUGICIEL_WOOCOMMERCE_DEPOT`, laisse vide).
 
 ## Pourquoi ce depot est separe du backend
 
