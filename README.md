@@ -20,16 +20,16 @@ propre journal de modifications, et les marchands rapporteront des anomalies
 cela illisible. Le corriger ne doit pas non plus exiger de redeployer
 cashmobile.net.
 
-## Origine, et ce qui a change
+## Pourquoi la version 2.0.0 est une reecriture
 
-Il part du plugin livre avec QRPay Pro (`reference/`, hors git). La version 2.0.0
-en est une reecriture, pour une raison qui n'etait pas cosmetique :
+Les versions anterieures **marquaient la commande « completed » sur la seule
+redirection de retour**, sans jamais demander a la passerelle si le paiement
+avait eu lieu. Or CashMobile renvoie le payeur vers `return_url` aussi en cas
+d'ECHEC. Un paiement refuse completait donc la commande et liberait la
+marchandise — sans qu'aucun attaquant n'ait a s'en meler.
 
-**l'original marquait la commande « completed » sur la seule redirection de
-retour**, sans jamais demander a la passerelle si le paiement avait eu lieu. Or
-CashMobile renvoie le payeur vers `return_url` aussi en cas d'ECHEC. Un paiement
-refuse completait donc la commande et liberait la marchandise — sans qu'aucun
-attaquant n'ait a s'en meler.
+C'est une rupture de comportement, pas un correctif : d'ou le changement de
+version majeure.
 
 Le journal complet est dans `cashmobile-gateway-for-woocommerce/readme.txt`.
 

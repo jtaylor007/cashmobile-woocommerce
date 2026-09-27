@@ -18,14 +18,14 @@
  * ---------------------------------------------------------------------------
  * WHY VERSION 2.0.0 AND NOT 1.1.1
  *
- * This replaces a plugin that marked WooCommerce orders as completed on the
- * strength of the return redirect alone — it never asked the gateway whether
- * the payment had actually succeeded. Since our gateway sends the payer back to
- * the return URL on FAILURE as well, a declined payment completed the order and
+ * Versions before 2.0.0 marked WooCommerce orders as completed on the strength
+ * of the return redirect alone — they never asked the gateway whether the
+ * payment had actually succeeded. Since our gateway sends the payer back to the
+ * return URL on FAILURE as well, a declined payment completed the order and
  * released the goods.
  *
- * That is a behavioural break, not a patch: a store upgrading from the old
- * plugin gets different — correct — behaviour, and the major version says so.
+ * That is a behavioural break, not a patch: a store upgrading from an earlier
+ * version gets different — correct — behaviour, and the major version says so.
  * ---------------------------------------------------------------------------
  */
 

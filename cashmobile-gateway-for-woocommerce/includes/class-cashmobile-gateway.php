@@ -4,15 +4,14 @@
  *
  * THE DEFECT THIS CLASS EXISTS TO FIX.
  *
- * The plugin this replaces confirmed payments like so:
+ * Versions before 2.0.0 confirmed a payment by comparing a token in the return
+ * URL against one stored on the order, and then calling
+ * `update_status('completed')`. They never asked the gateway anything.
  *
- *     if ($order->get_meta('qrpay_token') !== $token) exit;
- *     $order->update_status('completed');
- *
- * It never called the gateway. And because CashMobile sends the payer back to
- * the return URL on FAILURE too — with `type=error` in the query string — a
- * declined payment completed the order and released the goods. No attacker
- * needed: it happened on every failed payment.
+ * CashMobile sends the payer back to the return URL on FAILURE as well, with
+ * `type=error` in the query string. A declined payment therefore completed the
+ * order and released the goods. No attacker was needed: it happened on every
+ * failed payment.
  *
  * Here, the return handler asks the gateway. Nothing else completes an order.
  *
@@ -24,8 +23,9 @@
  *    it is good for nothing but matching that one return.
  *  - `update_status('completed')` skipped `payment_complete()`, so stock was
  *    never reduced and a physical order jumped straight to "shipped".
- *  - Guzzle was bundled in the plugin (1.4 MB, never updated, liable to clash
- *    with another plugin's copy). WordPress ships an HTTP client; we use it.
+ *  - An HTTP library was bundled inside the plugin (1.4 MB, never updated,
+ *    liable to clash with another plugin's copy of it). WordPress ships an HTTP
+ *    client; we use that.
  */
 
 if (! defined('ABSPATH')) {
@@ -93,7 +93,7 @@ class CashMobile_WC_Gateway extends WC_Payment_Gateway
             /*
              | ONE SITE FIELD AND A MODE, RATHER THAN A FREE-TEXT BASE URL.
              |
-             | The old plugin asked for the full base URL by hand, which made the
+             | Earlier versions asked for the full base URL by hand, which made the
              | commonest integration mistake possible: a sandbox key against the
              | production URL, refused by the gateway with a message that says
              | nothing about which half is wrong. Here the mode picks the path,
