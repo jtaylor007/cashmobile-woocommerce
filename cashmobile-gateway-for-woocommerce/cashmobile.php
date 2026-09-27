@@ -3,7 +3,7 @@
  * Plugin Name: CashMobile Gateway for WooCommerce
  * Plugin URI: https://cashmobile.net/developer
  * Description: Accept payments on your WooCommerce store through CashMobile.
- * Version: 2.0.0
+ * Version: 2.1.1
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: CashMobile
@@ -33,7 +33,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('CASHMOBILE_WC_VERSION', '2.0.0');
+define('CASHMOBILE_WC_VERSION', '2.1.1');
 define('CASHMOBILE_WC_FILE', __FILE__);
 define('CASHMOBILE_WC_PATH', plugin_dir_path(__FILE__));
 
@@ -82,6 +82,41 @@ add_action('plugins_loaded', function () {
 
         return $methods;
     });
+});
+
+/**
+ * The BLOCK checkout registers payment methods separately.
+ *
+ * A gateway can be available server-side and still be invisible to the buyer:
+ * the block checkout renders only what registered with its own registry, and it
+ * is what a new WooCommerce store gets by default. Without this hook the plugin
+ * installs, reports itself active, and shows nothing at the checkout.
+ */
+add_action('woocommerce_blocks_loaded', function () {
+    if (! class_exists('Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\AbstractPaymentMethodType')) {
+        return;
+    }
+
+    require_once CASHMOBILE_WC_PATH . 'includes/class-cashmobile-blocks.php';
+
+    add_action(
+        'woocommerce_blocks_payment_method_type_registration',
+        /*
+         | AUCUN TYPE DECLARE sur le parametre, volontairement.
+         |
+         | La classe du registre a change de namespace entre les versions de
+         | WooCommerce — `Blocks\Registry\PaymentMethodRegistry` dans
+         | certaines, `Blocks\Payments\PaymentMethodRegistry` dans d'autres.
+         | Un type declare couple donc le plugin a une version precise, et
+         | l'erreur qui en resulte est FATALE : elle tombe pendant
+         | `wp-settings.php` et emporte tout le site, pas seulement la caisse.
+         */
+        function ($registre) {
+            if (is_object($registre) && method_exists($registre, 'register')) {
+                $registre->register(new CashMobile_WC_Blocks());
+            }
+        }
+    );
 });
 
 /**
