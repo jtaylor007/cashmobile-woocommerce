@@ -1,0 +1,10 @@
+# Les archives construites sont des artefacts de version, pas des sources.
+dist/
+*.zip
+
+# Le zip original du vendeur : garde sur disque comme reference de comparaison,
+# jamais publie ni commite.
+reference/
+
+.DS_Store
+Thumbs.db
